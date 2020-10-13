@@ -3,6 +3,8 @@ package com.example.wifisimpleapplication;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
@@ -34,10 +36,13 @@ public class MainActivity extends AppCompatActivity {
 
     private WifiBroadcastReceiver wifiReceiver;
 
-    private LinearLayout llScan;
+  //  private LinearLayout llScan;
     private TextView tvWifiState;
     private Button btnScan;
     private Button btnCheckWifiState;
+
+    private RecyclerView rvScanList;
+    private MyAdapter myAdapter ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +58,9 @@ public class MainActivity extends AppCompatActivity {
         this.tvWifiState =  this.findViewById(R.id.tvWifiState);
         this.btnScan =  this.findViewById(R.id.btnScan);
         this.btnCheckWifiState =  this.findViewById(R.id.btnCheckWifiState);
-        this.llScan = this.findViewById(R.id.llScan);
+      //  this.llScan = this.findViewById(R.id.llScan);
+
+
 
     }
 
@@ -61,10 +68,14 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent)   {
             boolean ok = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false);
-
+            rvScanList = findViewById(R.id.rvScanList);
             if (ok)  {
                 List<ScanResult> list = wifiManager.getScanResults();
-                MainActivity.this.showNetworks(list);
+                myAdapter = new MyAdapter(MainActivity.this, list);
+                //MainActivity.this.showNetworks(list);
+                rvScanList.setAdapter(myAdapter);
+                rvScanList.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+
             }  else {
                 Toast.makeText(MainActivity.this, "Can't find any Wifi: " , Toast.LENGTH_LONG).show();
             }
@@ -72,26 +83,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showNetworks(List<ScanResult> results) {
-        this.llScan.removeAllViews();
-
-        for( final ScanResult result: results)  {
-            final String networkSSID = result.SSID; // Network Name.
-            //
-            Button button = new Button(this );
-
-            button.setText(networkSSID);
-            this.llScan.addView(button);
-
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //connect to network
-                }
-            });
-        }
-    }
-
+//    private void showNetworks(List<ScanResult> results) {
+//      //  this.llScan.removeAllViews();
+//
+//        for( final ScanResult result: results)  {
+//            final String networkSSID = result.SSID; // Network Name.
+//            //
+//            Button button = new Button(this );
+//
+//            button.setText(networkSSID);
+//         //   this.llScan.addView(button);
+//
+//            button.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    //connect to network
+//                }
+//            });
+//        }
+//    }
 
 
     @Override

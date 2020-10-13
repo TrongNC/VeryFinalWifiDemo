@@ -8,65 +8,60 @@
 
     <Button
         android:id="@+id/btnScan"
-        android:layout_width="149dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="48dp"
+        android:layout_width="183dp"
+        android:layout_height="75dp"
+        android:layout_marginBottom="31dp"
         android:onClick="scan"
         android:text="@string/btnScan"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintBottom_toTopOf="@+id/rvScanList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvWifiState" />
 
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="403dp"
-        android:layout_height="513dp"
-        android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnScan">
-
-        <LinearLayout
-            android:id="@+id/llScan"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5sp"
-            android:layout_marginTop="5sp"
-            android:layout_marginRight="5sp"
-            android:layout_marginBottom="5sp"
-            android:orientation="vertical" />
-    </ScrollView>
-
     <Button
         android:id="@+id/btnCheckWifiState"
-        android:layout_width="217dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginLeft="44dp"
+        android:layout_width="154dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginLeft="33dp"
         android:layout_marginTop="44dp"
         android:layout_marginEnd="60dp"
         android:layout_marginRight="60dp"
+        android:layout_marginBottom="25dp"
         android:onClick="check"
         android:text="@string/btnCheckWifiState"
+        app:layout_constraintBottom_toTopOf="@+id/btnScan"
         app:layout_constraintEnd_toStartOf="@+id/tvWifiState"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvWifiState"
-        android:layout_width="71dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="46dp"
-        android:layout_marginEnd="41dp"
-        android:layout_marginRight="41dp"
-        android:layout_marginBottom="31dp"
+        android:layout_width="135dp"
+        android:layout_height="17dp"
+        android:layout_marginTop="49dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="33dp"
         android:gravity="center"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/btnScan"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnCheckWifiState"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvScanList"
+        android:layout_width="413dp"
+        android:layout_height="531dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginRight="1dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnScan" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
