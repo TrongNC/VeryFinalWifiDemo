@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
     private WifiBroadcastReceiver wifiReceiver;
 
-  //  private LinearLayout llScan;
     private TextView tvWifiState;
     private Button btnScan;
     private Button btnCheckWifiState;
@@ -58,10 +57,6 @@ public class MainActivity extends AppCompatActivity {
         this.tvWifiState =  this.findViewById(R.id.tvWifiState);
         this.btnScan =  this.findViewById(R.id.btnScan);
         this.btnCheckWifiState =  this.findViewById(R.id.btnCheckWifiState);
-      //  this.llScan = this.findViewById(R.id.llScan);
-
-
-
     }
 
     class WifiBroadcastReceiver extends BroadcastReceiver {
@@ -70,9 +65,8 @@ public class MainActivity extends AppCompatActivity {
             boolean ok = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false);
             rvScanList = findViewById(R.id.rvScanList);
             if (ok)  {
-                List<ScanResult> list = wifiManager.getScanResults();
-                myAdapter = new MyAdapter(MainActivity.this, list);
-                //MainActivity.this.showNetworks(list);
+                List<ScanResult> listScan = wifiManager.getScanResults();
+                myAdapter = new MyAdapter(MainActivity.this, listScan);
                 rvScanList.setAdapter(myAdapter);
                 rvScanList.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
@@ -83,34 +77,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    private void showNetworks(List<ScanResult> results) {
-//      //  this.llScan.removeAllViews();
-//
-//        for( final ScanResult result: results)  {
-//            final String networkSSID = result.SSID; // Network Name.
-//            //
-//            Button button = new Button(this );
-//
-//            button.setText(networkSSID);
-//         //   this.llScan.addView(button);
-//
-//            button.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    //connect to network
-//                }
-//            });
-//        }
-//    }
-
-
     @Override
     protected void onStop()  {
         this.unregisterReceiver(this.wifiReceiver);
         super.onStop();
     }
 
-    public void check(View view){
+    public void checkWifiState(View view){
         String state = showWifiState();
         if(state.equalsIgnoreCase("Enabled")){
             tvWifiState.setText("ON");
@@ -145,12 +118,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void scan(View view){
+    public void scanWifi(View view){
         askAndStartScanWifi();
     }
 
     private void askAndStartScanWifi()  {
-
         // With Android Level >= 23, you have to ask the user
         // for permission to Call.
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) { // 23
@@ -176,39 +148,4 @@ public class MainActivity extends AppCompatActivity {
         this.wifiManager.startScan();
     }
 
-//    private void connectToNetwork(String networkCapabilities, String networkSSID)  {
-//        Toast.makeText(this, "Connecting to network: " + networkSSID, Toast.LENGTH_SHORT).show();
-//
-//        String networkPass = this.editTextPassword.getText().toString();
-//        //
-//        WifiConfiguration wifiConfig = new WifiConfiguration();
-//        wifiConfig.SSID = "\"" + networkSSID + "\"";
-//
-//        if (networkCapabilities.toUpperCase().contains("WEP")) { // WEP Network.
-//            Toast.makeText(this, "WEP Network", Toast.LENGTH_SHORT).show();
-//
-//            wifiConfig.wepKeys[0] = "\"" + networkPass + "\"";
-//            wifiConfig.wepTxKeyIndex = 0;
-//            wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-//            wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
-//        } else if (networkCapabilities.toUpperCase().contains("WPA")) { // WPA Network
-//            Toast.makeText(this, "WPA Network", Toast.LENGTH_SHORT).show();
-//            wifiConfig.preSharedKey = "\"" + networkPass + "\"";
-//        } else { // OPEN Network.
-//            Toast.makeText(this, "OPEN Network", Toast.LENGTH_SHORT).show();
-//            wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-//        }
-//
-//        this.wifiManager.addNetwork(wifiConfig);
-//
-//        List<WifiConfiguration> list = this.wifiManager.getConfiguredNetworks();
-//        for (WifiConfiguration config : list) {
-//            if (config.SSID != null && config.SSID.equals("\"" + networkSSID + "\"")) {
-//                this.wifiManager.disconnect();
-//                this.wifiManager.enableNetwork(config.networkId, true);
-//                this.wifiManager.reconnect();
-//                break;
-//            }
-//        }
-//    }
 }

@@ -15,14 +15,13 @@ import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private Context context;
-    private List<ScanResult> list;
+    private List<ScanResult> listScan;
 
-    public MyAdapter(Context context, List<ScanResult> list) {
+    public MyAdapter(Context context, List<ScanResult> listScan) {
         this.context = context;
-        this.list = list;
+        this.listScan = listScan;
     }
-
-
+    
     //create new view
     @NonNull
     @Override
@@ -36,14 +35,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     //replace content
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ScanResult result = list.get(position);
+        ScanResult result = listScan.get(position);
         String networkSSID = result.SSID;
         holder.btnWifi.setText(networkSSID);
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return listScan.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
