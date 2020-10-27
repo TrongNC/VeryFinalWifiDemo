@@ -48,34 +48,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        rvScanList = findViewById(R.id.rvScanList);
+        tvWifiState =  findViewById(R.id.tvWifiState);
+        btnScan =  findViewById(R.id.btnScan);
+        btnCheckWifiState =  findViewById(R.id.btnCheckWifiState);
 
-        this.wifiReceiver = new WifiBroadcastReceiver();
+        btnCheckWifiState.setBackgroundColor(Color.CYAN);
+        btnCheckWifiState.setTextColor(Color.WHITE);
 
+        btnScan.setClickable(Boolean.FALSE);
+        btnScan.setBackgroundColor(Color.GRAY);
+        btnScan.setTextColor(Color.BLACK);
+
+        wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wifiReceiver = new WifiBroadcastReceiver();
         registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-
-        this.tvWifiState =  this.findViewById(R.id.tvWifiState);
-        this.btnScan =  this.findViewById(R.id.btnScan);
-        this.btnCheckWifiState =  this.findViewById(R.id.btnCheckWifiState);
     }
 
-    class WifiBroadcastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent)   {
-            boolean ok = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false);
-            rvScanList = findViewById(R.id.rvScanList);
-            if (ok)  {
-                List<ScanResult> listScan = wifiManager.getScanResults();
-                myAdapter = new MyAdapter(MainActivity.this, listScan);
-                rvScanList.setAdapter(myAdapter);
-                rvScanList.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-
-            }  else {
-                Toast.makeText(MainActivity.this, "Can't find any Wifi: " , Toast.LENGTH_LONG).show();
-            }
-
-        }
-    }
 
     @Override
     protected void onStop()  {
@@ -88,10 +77,18 @@ public class MainActivity extends AppCompatActivity {
         if(state.equalsIgnoreCase("Enabled")){
             tvWifiState.setText("ON");
             tvWifiState.setBackgroundColor(Color.GREEN);
+
+            btnScan.setClickable(Boolean.TRUE);
+            btnScan.setBackgroundColor(Color.CYAN);
+            btnScan.setTextColor(Color.WHITE);
         }
         else if(state.equalsIgnoreCase("Disabled")){
             tvWifiState.setText("OFF");
             tvWifiState.setBackgroundColor(RED);
+
+            btnScan.setClickable(Boolean.FALSE);
+            btnScan.setBackgroundColor(Color.GRAY);
+            btnScan.setTextColor(Color.BLACK);
         }
         else{
             tvWifiState.setText("UNKNOWN");
@@ -146,6 +143,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void doStartScanWifi()  {
         this.wifiManager.startScan();
+    }
+
+
+    class WifiBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent)   {
+            boolean ok = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false);
+
+            if (ok)  {
+                List<ScanResult> listScan = wifiManager.getScanResults();
+                myAdapter = new MyAdapter(MainActivity.this, listScan);
+                rvScanList.setAdapter(myAdapter);
+                rvScanList.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+
+            }  else {
+                Toast.makeText(MainActivity.this, "Can't find any Wifi: " , Toast.LENGTH_LONG).show();
+            }
+
+        }
     }
 
 }
