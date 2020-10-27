@@ -5,4 +5,12 @@
     <string name="btnCheckWifiState">Check Wifi State</string>
     <string name="btnConnect">Connect</string>
     <string name="btnExit">Exit</string>
+    <string name="arlertTitle">Wifi Information
+    </string>
+    <string name="wifiName"><b>Name: </b>
+    </string>
+    <string name="wifiSignal"><b>Signal Strength: </b>
+    </string>
+    <string name="arlertOK">OK
+    </string>
 </resources>

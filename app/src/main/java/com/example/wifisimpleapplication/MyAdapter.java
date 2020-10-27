@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.net.wifi.ScanResult;
+import android.os.Build;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +15,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
+import static android.provider.Settings.Global.getString;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.WifiListItemViewHolder> {
     private Context context;
@@ -59,14 +64,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.WifiListItemViewHo
         }
 
         holder.setItemClickListener(new WifiItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(context);
 
-                dialog.setTitle("Wifi Information");
-                dialog.setMessage("Name: " + holder.tvWifiName.getText() +"\n" + "Signal Strength: " + signal);
+                dialog.setTitle(context.getString(R.string.arlertTitle));
+                dialog.setMessage(Html.fromHtml("<b>" + context.getString(R.string.wifiName) + "</b>" + holder.tvWifiName.getText() + "<br>"
+                        + "<b>" + context.getString(R.string.wifiSignal) + "</b>" + signal));
 
-                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                dialog.setPositiveButton(context.getString(R.string.arlertOK), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
