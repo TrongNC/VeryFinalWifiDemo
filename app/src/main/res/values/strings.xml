@@ -16,4 +16,5 @@
     <string name="tvName">Name: </string>
     <string name="tvSignal">Signal Strength: </string>
     <string name="btnOK">OK</string>
+    <string name="tvPassword">Password: </string>
 </resources>

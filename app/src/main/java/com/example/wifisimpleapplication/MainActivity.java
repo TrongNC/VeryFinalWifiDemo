@@ -13,6 +13,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private WifiManager wifiManager;
 
     private WifiBroadcastReceiver wifiReceiver;
+
+    private StateBroadcastReceiver stateReceiver;
 
     private TextView tvWifiState;
     private Button btnScan;
@@ -63,6 +67,11 @@ public class MainActivity extends AppCompatActivity {
         wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifiReceiver = new WifiBroadcastReceiver();
         registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+
+        stateReceiver = new StateBroadcastReceiver();
+        registerReceiver(stateReceiver, new IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION));
+
+
     }
 
     @Override
@@ -144,10 +153,19 @@ public class MainActivity extends AppCompatActivity {
         this.wifiManager.startScan();
     }
 
+    public boolean checkOnlineState() {
+        ConnectivityManager CManager =(ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo NInfo = CManager.getActiveNetworkInfo();
+        if (NInfo != null && NInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
+    }
 
     class WifiBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent)   {
+
             boolean ok = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false);
 
             if (ok)  {
@@ -158,6 +176,35 @@ public class MainActivity extends AppCompatActivity {
 
             }  else {
                 Toast.makeText(MainActivity.this, "Can't find any Wifi " , Toast.LENGTH_LONG).show();
+            }
+
+        }
+    }
+
+    class StateBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent)   {
+
+            String state = showWifiState();
+            if(state.equalsIgnoreCase("Enabled")){
+                tvWifiState.setText("ON");
+                tvWifiState.setBackgroundColor(Color.GREEN);
+
+                btnScan.setClickable(Boolean.TRUE);
+                btnScan.setBackgroundColor(Color.CYAN);
+                btnScan.setTextColor(Color.WHITE);
+            }
+            else if(state.equalsIgnoreCase("Disabled")){
+                tvWifiState.setText("OFF");
+                tvWifiState.setBackgroundColor(RED);
+
+                btnScan.setClickable(Boolean.FALSE);
+                btnScan.setBackgroundColor(Color.GRAY);
+                btnScan.setTextColor(Color.BLACK);
+            }
+            else{
+                tvWifiState.setText("UNKNOWN");
+                tvWifiState.setBackgroundColor(Color.GRAY);
             }
 
         }
