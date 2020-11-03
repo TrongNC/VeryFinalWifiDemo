@@ -13,4 +13,7 @@
     </string>
     <string name="arlertOK">OK
     </string>
+    <string name="tvName">Name: </string>
+    <string name="tvSignal">Signal Strength: </string>
+    <string name="btnOK">OK</string>
 </resources>

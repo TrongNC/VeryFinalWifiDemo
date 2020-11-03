@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
     }
 
-
     @Override
     protected void onStop()  {
         this.unregisterReceiver(this.wifiReceiver);
@@ -158,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                 rvScanList.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
             }  else {
-                Toast.makeText(MainActivity.this, "Can't find any Wifi: " , Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Can't find any Wifi " , Toast.LENGTH_LONG).show();
             }
 
         }

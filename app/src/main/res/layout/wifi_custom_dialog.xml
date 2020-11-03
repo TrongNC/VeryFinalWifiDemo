@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+>
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:text="@string/tvName"
+        android:textSize="19sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvWifiNameDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/tvName"
+        android:layout_toEndOf="@+id/tvName"
+        android:gravity="center"
+        android:textSize="19sp" />
+
+    <TextView
+        android:id="@+id/tvSignal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvName"
+        android:layout_marginTop="20dp"
+        android:text="@string/tvSignal"
+        android:textSize="19sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvWifiSignalDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="1dp"
+        android:layout_toRightOf="@+id/tvSignal"
+        android:layout_toEndOf="@+id/tvSignal"
+        android:layout_below="@+id/tvWifiNameDetail"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textSize="19sp" />
+
+    <Button
+        android:id="@+id/btnok"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/tvSignal"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/btnok_click"
+        android:gravity="center_vertical|center_horizontal" />
+
+</RelativeLayout>
