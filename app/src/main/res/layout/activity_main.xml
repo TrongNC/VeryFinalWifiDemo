@@ -13,16 +13,19 @@
         android:layout_height="wrap_content"
         android:onClick="checkWifiState"
         android:paddingLeft="10dp"
+        android:clickable="false"
         android:text="@string/btnCheckWifiState" />
 
     <Button
         android:id="@+id/btnScan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_below="@id/btnCheckWifiState"
         android:layout_marginTop="20dp"
         android:onClick="scanWifi"
-        android:text="@string/btnScan" />
+        android:background="@drawable/btnscan_click"
+        android:gravity="center_vertical|center_horizontal" />
+
 
     <TextView
         android:id="@+id/tvWifiState"

@@ -61,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
         btnCheckWifiState.setTextColor(Color.WHITE);
 
         btnScan.setClickable(Boolean.FALSE);
-        btnScan.setBackgroundColor(Color.GRAY);
-        btnScan.setTextColor(Color.BLACK);
 
         wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifiReceiver = new WifiBroadcastReceiver();
@@ -87,16 +85,12 @@ public class MainActivity extends AppCompatActivity {
             tvWifiState.setBackgroundColor(Color.GREEN);
 
             btnScan.setClickable(Boolean.TRUE);
-            btnScan.setBackgroundColor(Color.CYAN);
-            btnScan.setTextColor(Color.WHITE);
         }
         else if(state.equalsIgnoreCase("Disabled")){
             tvWifiState.setText("OFF");
             tvWifiState.setBackgroundColor(RED);
 
             btnScan.setClickable(Boolean.FALSE);
-            btnScan.setBackgroundColor(Color.GRAY);
-            btnScan.setTextColor(Color.BLACK);
         }
         else{
             tvWifiState.setText("UNKNOWN");
@@ -153,22 +147,13 @@ public class MainActivity extends AppCompatActivity {
         this.wifiManager.startScan();
     }
 
-    public boolean checkOnlineState() {
-        ConnectivityManager CManager =(ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo NInfo = CManager.getActiveNetworkInfo();
-        if (NInfo != null && NInfo.isConnectedOrConnecting()) {
-            return true;
-        }
-        return false;
-    }
-
     class WifiBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent)   {
 
-            boolean ok = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false);
+            boolean isUpdate = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false);
 
-            if (ok)  {
+            if (isUpdate)  {
                 List<ScanResult> listScan = wifiManager.getScanResults();
                 myAdapter = new MyAdapter(MainActivity.this, listScan);
                 rvScanList.setAdapter(myAdapter);
@@ -185,22 +170,18 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent)   {
 
-            String state = showWifiState();
-            if(state.equalsIgnoreCase("Enabled")){
+            String wifiState = showWifiState();
+            if(wifiState.equalsIgnoreCase("Enabled")){
                 tvWifiState.setText("ON");
                 tvWifiState.setBackgroundColor(Color.GREEN);
 
                 btnScan.setClickable(Boolean.TRUE);
-                btnScan.setBackgroundColor(Color.CYAN);
-                btnScan.setTextColor(Color.WHITE);
             }
-            else if(state.equalsIgnoreCase("Disabled")){
+            else if(wifiState.equalsIgnoreCase("Disabled")){
                 tvWifiState.setText("OFF");
                 tvWifiState.setBackgroundColor(RED);
 
                 btnScan.setClickable(Boolean.FALSE);
-                btnScan.setBackgroundColor(Color.GRAY);
-                btnScan.setTextColor(Color.BLACK);
             }
             else{
                 tvWifiState.setText("UNKNOWN");

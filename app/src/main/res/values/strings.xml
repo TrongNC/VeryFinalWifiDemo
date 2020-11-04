@@ -2,7 +2,7 @@
     <string name="app_name">Wifi Scan</string>
     <string name="tvWifiStatus">Wifi :</string>
     <string name="btnScan">Scan</string>
-    <string name="btnCheckWifiState">Check Wifi State</string>
+    <string name="btnCheckWifiState">Wifi State</string>
     <string name="btnConnect">Connect</string>
     <string name="btnExit">Exit</string>
     <string name="arlertTitle">Wifi Information

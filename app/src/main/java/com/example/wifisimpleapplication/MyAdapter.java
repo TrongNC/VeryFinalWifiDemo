@@ -40,8 +40,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.WifiListItemViewHo
     private Button btnOK;
     private TextView tvWifiNameDetail;
     private TextView tvWifiSignalDetail;
-
     private EditText etPassword;
+
+    private boolean isConnected = false;
 
     public MyAdapter(Context context, List<ScanResult> listScan) {
         this.context = context;
@@ -62,6 +63,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.WifiListItemViewHo
     public void onBindViewHolder(@NonNull final WifiListItemViewHolder holder, int position) {
         final ScanResult result = listScan.get(position);
         holder.tvWifiName.setText(result.SSID);
+
 
         /*
         Excellent >-50 dBm
@@ -84,10 +86,20 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.WifiListItemViewHo
             public void onClick(View view, int position, boolean isLongClick) {
                 String wifiName = holder.tvWifiName.getText().toString();
 
+                // function : dialog show wifi details : wifi name & signal strength
                 //showWifiDetailDialog(wifiName, signal);
 
-
                 connectWifiDialog(result, wifiName);
+
+                if(isConnected == Boolean.TRUE){
+//                    holder.tvWifiName.setBackgroundColor(Color.CYAN);
+//                    holder.tvWifiName.setTextColor(Color.BLACK);
+                    view.setSelected(true);
+                }
+                else{
+                    holder.tvWifiName.setBackgroundColor(Color.BLACK);
+                    holder.tvWifiName.setTextColor(Color.WHITE);
+                }
             }
         });
 
@@ -124,32 +136,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.WifiListItemViewHo
         }
     }
 
-    public void showWifiDetailDialog(String wifiName, int signal) {
-        final Dialog dialog = new Dialog(context);
-        dialog.setContentView(R.layout.wifi_custom_dialog);
-
-        btnOK = (Button) dialog.findViewById(R.id.btnok);
-
-        dialog.setCanceledOnTouchOutside(false);
-        Window view = dialog.getWindow();
-        view.setBackgroundDrawableResource(R.drawable.red_border);
-
-        tvWifiNameDetail = dialog.findViewById(R.id.tvWifiNameDetail);
-        tvWifiSignalDetail = dialog.findViewById(R.id.tvWifiSignalDetail);
-
-        tvWifiNameDetail.setText(wifiName);
-        tvWifiSignalDetail.setText(String.valueOf(signal));
-
-        btnOK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-    }
-
     public void connectWifiDialog(final ScanResult result, String wifiName) {
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.connect_selected_wifi);
@@ -167,7 +153,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.WifiListItemViewHo
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                connectthis(result, etPassword.getText().toString());
+                connectSelectedWifi(result, etPassword.getText().toString());
                 dialog.dismiss();
             }
         });
@@ -175,25 +161,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.WifiListItemViewHo
         dialog.show();
     }
 
-    public void ConnectToWiFi(String ssid, String key, Context ctx) {
-
-        WifiConfiguration wifiConfig = new WifiConfiguration();
-        wifiConfig.SSID = String.format("\"%s\"", ssid);
-        wifiConfig.preSharedKey = String.format("\"%s\"", key);
-        WifiManager wifiManager = (WifiManager) ctx.getSystemService(ctx.WIFI_SERVICE);
-        int networkId = wifiManager.getConnectionInfo().getNetworkId();
-        wifiManager.removeNetwork(networkId);
-        wifiManager.saveConfiguration();
-        //remember id
-        int netId = wifiManager.addNetwork(wifiConfig);
-        wifiManager.disconnect();
-        wifiManager.enableNetwork(netId, true);
-        wifiManager.reconnect();
-    }
-
     //--------------using WifiConfiguration -->> deprecated in API lvl 29------------------------
     //----------------------targeted API in this project is 28-----------------------------------
-    private void connectthis(ScanResult res, String password) {
+    private void connectSelectedWifi(ScanResult res, String password) {
         Context context = this.context.getApplicationContext();
         WifiConfiguration wifiConfig = new WifiConfiguration();
         wifiConfig.SSID = String.format("\"%s\"", res.SSID);
@@ -226,8 +196,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.WifiListItemViewHo
 
         if (password.equalsIgnoreCase(""))
             wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-        WifiManager wifiManager =
-                (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         boolean isConfigured = false;
 
         if (ActivityCompat.checkSelfPermission(this.context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -240,6 +210,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.WifiListItemViewHo
                     wifiManager.enableNetwork(i.networkId, true);
                     wifiManager.reconnect();
                     isConfigured = true;
+                    isConnected = Boolean.TRUE;
                     break;
                 }
             }
@@ -249,9 +220,38 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.WifiListItemViewHo
                 wifiManager.saveConfiguration();
                 wifiManager.disconnect();
                 wifiManager.enableNetwork(netId, true);
+
             }
         }
 
+
+
+    }
+
+    public void showWifiDetailDialog(String wifiName, int signal) {
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.wifi_custom_dialog);
+
+        btnOK = dialog.findViewById(R.id.btnok);
+
+        dialog.setCanceledOnTouchOutside(false);
+        Window view = dialog.getWindow();
+        view.setBackgroundDrawableResource(R.drawable.red_border);
+
+        tvWifiNameDetail = dialog.findViewById(R.id.tvWifiNameDetail);
+        tvWifiSignalDetail = dialog.findViewById(R.id.tvWifiSignalDetail);
+
+        tvWifiNameDetail.setText(wifiName);
+        tvWifiSignalDetail.setText(String.valueOf(signal));
+
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
 }
